@@ -28,21 +28,18 @@ var Player = function() {
     this.sprite ='images/char-boy.png'
 };
 
-Player.update = function() {
+Player.prototype.update = function() {
 
 };
 
-Player.render = function() {
+Player.prototype.render = function() {
 
 };
 
-Player.handleInput = function() {
+Player.prototype.handleInput = function() {
 
 };
 
-Player.prototype.update = function(){};
-Player.prototype.render = function(){};
-Player.prototype.handleInput = function(){};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -61,5 +58,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    player.prototype.handleInput(allowedKeys[e.keyCode]);
 });
