@@ -14,7 +14,7 @@ Enemy.prototype.update = function(dt, player) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x > 510) { // If enemy goes outside screen, reset to the left side and change its speed
+    if (this.x > 707) { // If enemy goes outside screen, reset to the left side and change its speed
         this.x = -110; 
         this.randomSpeed();
     }
@@ -32,6 +32,11 @@ Enemy.prototype.checkCollision = function(object) {
 
 Enemy.prototype.randomSpeed = function() {
     this.speed = Math.floor((Math.random() * 6) + 2);
+    if (this.speed > 3) {
+        this.sprite = 'images/enemy-bug-green.png';
+    } else {
+        this.sprite = 'images/enemy-bug.png';
+    }
 };
 
 // Draw the enemy on the screen
@@ -65,11 +70,11 @@ Player.prototype.update = function(dt) {
     // Change direction based on the input receieved and make sure player don't exit screen
     if (this.direction === 'up' && this.y > 0) {
         this.y -= this.speed;
-    } else if (this.direction === 'down'  && this.y < 405) {
+    } else if (this.direction === 'down'  && this.y < 400) {
         this.y += this.speed;
     } else if (this.direction === 'left'  && this.x > 0) {
         this.x -= this.speed;
-    } else if (this.direction === 'right' && this.x < 405) {
+    } else if (this.direction === 'right' && this.x < 600) {
         this.x += this.speed;
     }
 };
@@ -112,7 +117,7 @@ Player.prototype.handleInput = function(key) {
 
 // Instantiate objects
 var allEnemies = [new Enemy(0,0), new Enemy(0,1), new Enemy(0,2), new Enemy(0,3)];
-var player = new Player(2, 5);
+var player = new Player(3, 5);
 
 // Listen for key presses and send to player.handleInput()
 document.addEventListener('keyup', function(e) {
