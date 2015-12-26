@@ -37,7 +37,7 @@ Enemy.prototype.render = function() {
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x * 101;
-    this.y = y * 83;
+    this.y = y * 81;
     this.speed = 2;
 };
 
@@ -53,21 +53,22 @@ Player.prototype.render = function() {
 
 // Handle the input to move the player
 Player.prototype.handleInput = function(key) {
-    if (key === 'up' || key === 'w') {
-        this.y -= 83;
-        console.log(this.x + ', ' + this.y);
-    } else if (key === 'down' || key === 's') {
-        this.y += 83;
-        console.log(this.x + ', ' + this.y);
-    } else if (key === 'left' || key === 'a') {
+    var logLoc = console.log('x: ' + this.x + ', y:' + this.y); // Log coordinates to console
+
+    if (key === 'up' && this.y > 0) {
+            this.y -= 83;
+            logLoc;
+    } else if (key === 'down' && this.y < 405) {
+            this.y += 83;
+            logLoc;
+    } else if (key === 'left' && this.x > 0) {
         this.x -= 101;
-        console.log(this.x + ', ' + this.y);
-    } else if (key === 'right' || key === 'd') {
+        logLoc;
+    } else if (key === 'right' && this.x < 304) {
         this.x += 101;
-        console.log(this.x + ', ' + this.y);
+        logLoc;
     }
 };
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -84,13 +85,9 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down',
-        65: 'a', // Added WASD movement
-        68: 'd',
-        83: 's',
-        87: 'w'
+        40: 'down'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-    console.log(allowedKeys[e.keyCode]);
+    console.log('Key: ' + allowedKeys[e.keyCode]);
 });
