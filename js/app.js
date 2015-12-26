@@ -18,6 +18,10 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    startCol = 0; // Using the grid laid out in engine.js
+    startRow = 3;
+    this.x = startCol * 101;
+    this.y = startRow * 83;
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -25,17 +29,28 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
-    this.sprite ='images/char-boy.png'
+    this.sprite = 'images/char-boy.png';
 };
 
-Player.prototype.update = function() {
+Player.prototype.startPosition = function() {
 
 };
 
+// Update player's position
+Player.prototype.update = function(dt) {
+
+};
+
+// Draw the player on the screen
 Player.prototype.render = function() {
-
+    startCol = 2; // Using the grid laid out in engine.js
+    startRow = 5;
+    this.x = startCol * 101;
+    this.y = startRow * 83;
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Handle the input to move the player
 Player.prototype.handleInput = function() {
 
 };
@@ -45,7 +60,8 @@ Player.prototype.handleInput = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var player = Player;
+var player = new Player();
+var enemy = new Enemy();
 
 
 // This listens for key presses and sends the keys to your
@@ -58,5 +74,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.prototype.handleInput(allowedKeys[e.keyCode]);
+    player.handleInput(allowedKeys[e.keyCode]);
 });
