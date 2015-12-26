@@ -6,9 +6,9 @@ var Enemy = function(x, y) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = x * 101;
-    this.x = this.x - 110;
+    this.x = (x * 101) - 110; // Offset x-coordinate to make bug start outside screen
     this.y = y * 73;
+    this.speed = Math.floor((Math.random() * 4) + 2); // Random number between 2-4 to determine enemy speed
 };
 
 // Update the enemy's position, required method for game
@@ -17,16 +17,18 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x > 510) {
-        this.x = -110;
+    if (this.x > 510) { // If enemy goes outside screen, reset to the left side and change its speed
+        this.x = -110; 
+        this.speed = Math.floor((Math.random() * 4) + 1);
     } else {
-        this.x += 3;
+        this.x += this.speed; // If enemy is still in the screen, set its movement speed
     }
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
 };
 
 // Now write your own player class
@@ -36,6 +38,7 @@ var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x * 101;
     this.y = y * 83;
+    this.speed = 2;
 };
 
 // Update player's position
@@ -49,8 +52,18 @@ Player.prototype.render = function() {
 };
 
 // Handle the input to move the player
-Player.prototype.handleInput = function() {
+Player.prototype.handleInput = function(key) {
+    if (key === 'up') {
+        this.y -= 83;
+    } else if (key === 'down') {
+        this.y += 83;
 
+    } else if (key === 'left') {
+        this.x -= 101;
+
+    } else if (key === 'right') {
+        this.x += 101;
+    }
 };
 
 
@@ -73,4 +86,5 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
+    console.log(allowedKeys[e.keyCode]);
 });
