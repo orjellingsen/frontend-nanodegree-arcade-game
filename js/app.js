@@ -80,8 +80,9 @@ Player.prototype.update = function(dt) {
 };
 
 Player.prototype.updateScore = function(condition) {
-    ctx.font = '18px Impact';
+    ctx.font = '18px Verdana';
     ctx.fillStyle = "#fff";
+    ctx.strokeWidth = 20;
     ctx.clearRect(0, 0, 500, 50);
     this.scoreText = ctx.fillText('Score: ' + this.score, 400, 40);
     this.highScoreText = ctx.fillText('Highest Score: ' + this.highScore, 50, 40);
