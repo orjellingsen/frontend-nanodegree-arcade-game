@@ -53,16 +53,18 @@ Player.prototype.render = function() {
 
 // Handle the input to move the player
 Player.prototype.handleInput = function(key) {
-    if (key === 'up') {
+    if (key === 'up' || key === 'w') {
         this.y -= 83;
-    } else if (key === 'down') {
+        console.log(this.x + ', ' + this.y);
+    } else if (key === 'down' || key === 's') {
         this.y += 83;
-
-    } else if (key === 'left') {
+        console.log(this.x + ', ' + this.y);
+    } else if (key === 'left' || key === 'a') {
         this.x -= 101;
-
-    } else if (key === 'right') {
+        console.log(this.x + ', ' + this.y);
+    } else if (key === 'right' || key === 'd') {
         this.x += 101;
+        console.log(this.x + ', ' + this.y);
     }
 };
 
@@ -82,7 +84,11 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        65: 'a', // Added WASD movement
+        68: 'd',
+        83: 's',
+        87: 'w'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
