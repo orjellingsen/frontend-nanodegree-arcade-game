@@ -9,7 +9,7 @@ var Enemy = function(x, y) {
     } else if (y === 3) {
         this.y = y * 81;
     }
-    this.speed = Math.floor((Math.random() * 4) + 2); // Random number between 2-4 to determine enemy speed
+    this.speed = Math.floor((Math.random() * 6) + 2); // Random number between 2-4 to determine enemy speed
     this.collisionWidth = 40;
     this.collisionHeight = 20;
 };
@@ -22,15 +22,11 @@ Enemy.prototype.update = function(dt, player) {
     // all computers.
     if (this.x > 510) { // If enemy goes outside screen, reset to the left side and change its speed
         this.x = -110; 
-        this.speed = Math.floor((Math.random() * 4) + 2);
-    } else {
-        if (this.x === player.x && this.y === player.y) {
-            player.reset();
-        } else {
-            this.x += this.speed; // If enemy is in the screen, set its movement speed
-            this.checkCollision(player);
-        }
+        this.speed = Math.floor((Math.random() * 6) + 2);
     }
+    this.x += this.speed; // If enemy is in the screen, set its movement speed
+    this.checkCollision(player);
+    
 };
 
 Enemy.prototype.checkCollision = function(player) {
@@ -46,17 +42,14 @@ Enemy.prototype.render = function() {
 
 };
 
-
-
-
-
 // Player class
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png'; // Player sprite
     this.x = x * 101; // Starting position
     this.y = y * 81;
-    this.speed = 3; // Player speed
+    this.speed = 4; // Player speed
     this.score = 0; // Player score starts at 0
+    this.highScore = this.score;
     this.direction = false;
 };
 
@@ -80,18 +73,21 @@ Player.prototype.update = function(dt) {
 };
 
 Player.prototype.updateScore = function(condition) {
-    ctx.font = '26px Impact';
+    ctx.font = '18px Impact';
     ctx.fillStyle = "#fff";
     ctx.clearRect(0, 0, 500, 50);
-    var scoreText = ctx.fillText('Score: ' + this.score, 300, 40);
+    this.scoreText = ctx.fillText('Score: ' + this.score, 400, 40);
+    this.highScoreText = ctx.fillText('Highest Score: ' + this.highScore, 50, 40);
     if (condition === 'water') {
-        this.score += 10;
-        scoreText;
+        this.score += 1;
+        this.scoreText;
     } else if (condition === 'collision') {
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+        }
         this.score = 0;
-        scoreText;
+        this.scoreText;
     }
-
 };
 
 // Draw the player on the screen
