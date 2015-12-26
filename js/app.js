@@ -1,17 +1,11 @@
 // Enemies that the player needs to avoid
 var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug.png'; // Enemy sprite
-    this.x = (x * 101) - 110; // Offset x-coordinate to make bug start outside screen
-    if (y === 1) {
-        this.y = y * 81;
-    } else if (y === 2) {
-        this.y = y * 81;
-    } else if (y === 3) {
-        this.y = y * 81;
-    }
-    this.speed = Math.floor((Math.random() * 6) + 2); // Random number between 2-4 to determine enemy speed
-    this.collisionWidth = 40;
-    this.collisionHeight = 20;
+    this.x = x - 110; // Offset x-coordinate to make bug start outside screen
+    this.y = 60 + 85 * y;
+    this.randomSpeed(); // Random number between 2-4 to determine enemy speed
+    this.collisionWidth = 50;
+    this.collisionHeight = 45;
 };
 
 // Update the enemy's position, required method for game
@@ -22,19 +16,23 @@ Enemy.prototype.update = function(dt, player) {
     // all computers.
     if (this.x > 510) { // If enemy goes outside screen, reset to the left side and change its speed
         this.x = -110; 
-        this.speed = Math.floor((Math.random() * 6) + 2);
+        this.randomSpeed();
     }
     this.x += this.speed; // If enemy is in the screen, set its movement speed
     this.checkCollision(player);
     
 };
 
-Enemy.prototype.checkCollision = function(player) {
-    if (Math.abs(player.x - this.x) < this.collisionWidth && Math.abs(player.y - this.y) < this.collisionHeight) {
-        player.updateScore('collision');
-        player.reset();
+Enemy.prototype.checkCollision = function(object) {
+    if (Math.abs(object.x - this.x) < this.collisionWidth && Math.abs(object.y - this.y) < this.collisionHeight) {
+        object.updateScore('collision');
+        object.reset();
     }
 }
+
+Enemy.prototype.randomSpeed = function() {
+    this.speed = Math.floor((Math.random() * 6) + 2);
+};
 
 // Draw the enemy on the screen
 Enemy.prototype.render = function() {
@@ -45,8 +43,12 @@ Enemy.prototype.render = function() {
 // Player class
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png'; // Player sprite
-    this.x = x * 101; // Starting position
-    this.y = y * 81;
+    this.startPos = { 
+        'x': x * 101,
+        'y': y * 81
+    };
+    this.x = this.startPos.x; // Starting position
+    this.y = this.startPos.y;
     this.speed = 4; // Player speed
     this.score = 0; // Player score starts at 0
     this.highScore = this.score;
@@ -93,13 +95,13 @@ Player.prototype.updateScore = function(condition) {
 // Draw the player on the screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    this.updateScore();
+    this.updateScore(); // Show initial score
 };
 
 // Reset player to original position and add score
 Player.prototype.reset = function() {
-    this.x = 2 * 101;
-    this.y = 5 * 81;
+    this.x = this.startPos.x;
+    this.y = this.startPos.y;
     this.direction = false;
 };
 
@@ -109,7 +111,7 @@ Player.prototype.handleInput = function(key) {
 };
 
 // Instantiate objects
-var allEnemies = [new Enemy(0,1), new Enemy(0,2), new Enemy(0,3)];
+var allEnemies = [new Enemy(0,0), new Enemy(0,1), new Enemy(0,2)];
 var player = new Player(2, 5);
 
 // Listen for key presses and send to player.handleInput()
