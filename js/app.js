@@ -64,18 +64,20 @@ var Player = function(x, y) {
 
 // Update player's position
 Player.prototype.update = function(dt) {
-    if (this.y < 0) {
+    // If the player reaches the water, add score and reset player
+    if (this.y < 1) {
         player.reset();
-        this.score += 1; // Add one to score and reset player when it reaches the water
+        this.score += 1;
         console.log('Score: ' + this.score);
     }
-    if (this.direction === 'up') {
+    // Change direction based on the input receieved
+    if (this.direction === 'up' && this.y > 0) {
         this.y -= this.speed;
-    } else if (this.direction === 'down') {
+    } else if (this.direction === 'down'  && this.y < 405) {
         this.y += this.speed;
-    } else if (this.direction === 'left') {
+    } else if (this.direction === 'left'  && this.x > 0) {
         this.x -= this.speed;
-    } else if (this.direction === 'right') {
+    } else if (this.direction === 'right' && this.x < 405) {
         this.x += this.speed;
     }
 };
@@ -97,17 +99,7 @@ Player.prototype.reset = function(collision) {
 
 // Handle the input to move the player
 Player.prototype.handleInput = function(key) {
-    var logLoc = console.log('x: ' + this.x + ', y:' + this.y); // Log coordinates to console
-
-    if (key === 'up' && this.y > 0) {
-        this.direction = 'up';
-    } else if (key === 'down' && this.y < 405) {
-        this.direction = 'down';
-    } else if (key === 'left' && this.x > 0) {
-        this.direction = 'left';
-    } else if (key === 'right' && this.x < 304) {
-        this.direction = 'right';
-    }
+    this.direction = key; // Change player.direction based on the key pressed
 };
 
 // Now instantiate your objects.
@@ -129,5 +121,4 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-    console.log('Key: ' + allowedKeys[e.keyCode]);
 });
