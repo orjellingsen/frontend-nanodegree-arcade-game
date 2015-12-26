@@ -111,7 +111,7 @@ Player.prototype.handleInput = function(key) {
 };
 
 // Instantiate objects
-var allEnemies = [new Enemy(0,0), new Enemy(0,1), new Enemy(0,2)];
+var allEnemies = [new Enemy(0,0), new Enemy(0,1), new Enemy(0,2), new Enemy(0,3)];
 var player = new Player(2, 5);
 
 // Listen for key presses and send to player.handleInput()
