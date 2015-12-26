@@ -1,11 +1,6 @@
-// Enemies our player must avoid
+// Enemies that the player needs to avoid
 var Enemy = function(x, y) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = 'images/enemy-bug.png'; // Enemy sprite
     this.x = (x * 101) - 110; // Offset x-coordinate to make bug start outside screen
     if (y === 1) {
         this.y = y * 81;
@@ -32,7 +27,7 @@ Enemy.prototype.update = function(dt, player) {
         if (this.x === player.x && this.y === player.y) {
             player.reset();
         } else {
-            this.x += this.speed; // If enemy is still in the screen, set its movement speed
+            this.x += this.speed; // If enemy is in the screen, set its movement speed
             this.checkCollision(player);
         }
     }
@@ -40,21 +35,24 @@ Enemy.prototype.update = function(dt, player) {
 
 Enemy.prototype.checkCollision = function(player) {
     if (Math.abs(player.x - this.x) < this.collisionWidth && Math.abs(player.y - this.y) < this.collisionHeight) {
-        player.reset('collision');
+        player.updateScore('collision');
+        player.reset();
     }
 }
 
-// Draw the enemy on the screen, required method for game
+// Draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+
+
+
+
+// Player class
 var Player = function(x, y) {
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-boy.png'; // Player sprite
     this.x = x * 101; // Starting position
     this.y = y * 81;
     this.speed = 3; // Player speed
@@ -66,11 +64,10 @@ var Player = function(x, y) {
 Player.prototype.update = function(dt) {
     // If the player reaches the water, add score and reset player
     if (this.y < 1) {
-        player.reset();
-        this.score += 1;
-        console.log('Score: ' + this.score);
+        this.reset();
+        this.updateScore('water');
     }
-    // Change direction based on the input receieved
+    // Change direction based on the input receieved and make sure player don't exit screen
     if (this.direction === 'up' && this.y > 0) {
         this.y -= this.speed;
     } else if (this.direction === 'down'  && this.y < 405) {
@@ -82,16 +79,29 @@ Player.prototype.update = function(dt) {
     }
 };
 
+Player.prototype.updateScore = function(condition) {
+    ctx.font = '26px Impact';
+    ctx.fillStyle = "#fff";
+    ctx.clearRect(0, 0, 500, 50);
+    var scoreText = ctx.fillText('Score: ' + this.score, 300, 40);
+    if (condition === 'water') {
+        this.score += 10;
+        scoreText;
+    } else if (condition === 'collision') {
+        this.score = 0;
+        scoreText;
+    }
+
+};
+
 // Draw the player on the screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.updateScore();
 };
 
-// Reset player to original position
-Player.prototype.reset = function(collision) {
-    if(collision) {
-        this.score = 0;
-    }
+// Reset player to original position and add score
+Player.prototype.reset = function() {
     this.x = 2 * 101;
     this.y = 5 * 81;
     this.direction = false;
@@ -102,16 +112,11 @@ Player.prototype.handleInput = function(key) {
     this.direction = key; // Change player.direction based on the key pressed
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Instantiate objects
 var allEnemies = [new Enemy(0,1), new Enemy(0,2), new Enemy(0,3)];
 var player = new Player(2, 5);
-//var enemy = new Enemy();
 
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Listen for key presses and send to player.handleInput()
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
