@@ -40,7 +40,7 @@ Enemy.prototype.update = function(dt, player) {
 
 Enemy.prototype.checkCollision = function(player) {
     if (Math.abs(player.x - this.x) < this.collisionWidth && Math.abs(player.y - this.y) < this.collisionHeight) {
-        player.reset();
+        player.reset('collision');
     }
 }
 
@@ -57,8 +57,9 @@ var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x * 101; // Starting position
     this.y = y * 81;
-    this.speed = 2;
+    this.speed = 3; // Player speed
     this.score = 0; // Player score starts at 0
+    this.direction = false;
 };
 
 // Update player's position
@@ -68,6 +69,15 @@ Player.prototype.update = function(dt) {
         this.score += 1; // Add one to score and reset player when it reaches the water
         console.log('Score: ' + this.score);
     }
+    if (this.direction === 'up') {
+        this.y -= this.speed;
+    } else if (this.direction === 'down') {
+        this.y += this.speed;
+    } else if (this.direction === 'left') {
+        this.x -= this.speed;
+    } else if (this.direction === 'right') {
+        this.x += this.speed;
+    }
 };
 
 // Draw the player on the screen
@@ -76,9 +86,13 @@ Player.prototype.render = function() {
 };
 
 // Reset player to original position
-Player.prototype.reset = function() {
+Player.prototype.reset = function(collision) {
+    if(collision) {
+        this.score = 0;
+    }
     this.x = 2 * 101;
     this.y = 5 * 81;
+    this.direction = false;
 };
 
 // Handle the input to move the player
@@ -86,17 +100,13 @@ Player.prototype.handleInput = function(key) {
     var logLoc = console.log('x: ' + this.x + ', y:' + this.y); // Log coordinates to console
 
     if (key === 'up' && this.y > 0) {
-            this.y -= 83;
-            logLoc;
+        this.direction = 'up';
     } else if (key === 'down' && this.y < 405) {
-            this.y += 83;
-            logLoc;
+        this.direction = 'down';
     } else if (key === 'left' && this.x > 0) {
-        this.x -= 101;
-        logLoc;
+        this.direction = 'left';
     } else if (key === 'right' && this.x < 304) {
-        this.x += 101;
-        logLoc;
+        this.direction = 'right';
     }
 };
 
