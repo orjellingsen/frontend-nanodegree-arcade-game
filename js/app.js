@@ -15,26 +15,25 @@ Enemy.prototype.update = function(dt, player) {
     // which will ensure the game runs at the same speed for
     // all computers.
     if (this.x > 707) { // If enemy goes outside screen, reset to the left side and change its speed
-        this.x = -110; 
-        this.randomSpeed();
+        this.x = -110;
+        this.randomSpeed(dt);
     }
     this.x += this.speed; // If enemy is in the screen, set its movement speed
     this.checkCollision(player);
-    
 };
 
-Enemy.prototype.checkCollision = function(object) {
-    if (Math.abs(object.x - this.x) < this.collisionWidth && Math.abs(object.y - this.y) < this.collisionHeight) {
-        object.updateScore('collision');
-        object.reset();
+Enemy.prototype.checkCollision = function(player) {
+    if (Math.abs(player.x - this.x) < this.collisionWidth && Math.abs(player.y - this.y) < this.collisionHeight) {
+        player.updateScore('collision');
+        player.reset();
     }
-}
+};
 
 Enemy.prototype.randomSpeed = function() {
-    this.speed = Math.floor((Math.random() * 8) + 4);
-    if (this.speed > 3 && this.speed < 5) {
+    this.speed = ((Math.floor((Math.random() * 8) + 2)));
+    if (this.speed > 3 && this.speed <= 5) {
         this.sprite = 'images/enemy-bug-green.png';
-    } else if (this.speed > 5 && this.speed < 7) {
+    } else if (this.speed > 5 && this.speed <= 7) {
         this.sprite = 'images/enemy-bug-yellow.png';
     } else if (this.speed > 7) {
         this.sprite = 'images/enemy-bug-blue.png';
@@ -46,12 +45,11 @@ Enemy.prototype.randomSpeed = function() {
 // Draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-
 };
 
 // Player class
 var Player = function(x, y) {
-    this.sprite = 'images/char-princess-girl.png'; // Player sprite
+    this.sprite = 'images/char-boy.png'; // Player sprite
     this.startPos = { 
         'x': x * 101,
         'y': y * 81
@@ -59,18 +57,15 @@ var Player = function(x, y) {
     this.x = this.startPos.x; // Starting position
     this.y = this.startPos.y;
     this.speed = 6; // Player speed
-    this.score = 0; // Player score starts at 0
+    this.score = 0;
     this.highScore = this.score;
     this.direction = false;
-    this.level(Player);
 };
 
 // Update player's position
 Player.prototype.update = function(dt) {
     // If the player reaches the water, add score, level and reset player
     if (this.y < 1) {
-        this.level(Player);
-        console.log(this.currentLevel);
         this.updateScore('water');
         this.reset();
     }
@@ -105,42 +100,6 @@ Player.prototype.updateScore = function(condition) {
     }
 };
 
-Player.prototype.level = function(player) {
-    player.level = {
-        1: [1,3],
-        2: [2,4],
-        3: [3,5],
-        4: [4,6],
-        5: [5,7],
-        6: [6,8],
-        7: [7,9],
-        8: [8,10],
-        9: [9,11],
-        10: [10,12]
-    }
-    if (this.score === 1 ) {
-        this.currentLevel = 1;
-    } else if (this.score === 2) {
-        this.currentLevel = 2;
-    } else if (this.score === 3) {
-        this.currentLevel = 3;
-    } else if (this.score === 4) {
-        this.currentLevel = 4;
-    } else if (this.score === 5) {
-        this.currentLevel = 5;
-    } else if (this.score === 6) {
-        this.currentLevel = 6;
-    } else if (this.score === 7) {
-        this.currentLevel = 7;
-    } else if (this.score === 8) {
-        this.currentLevel = 8;
-    } else if (this.score === 9) {
-        this.currentLevel = 9;
-    } else if (this.score === 10) {
-        this.currentLevel = 10;
-    }
-};
-
 // Draw the player on the screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -151,7 +110,7 @@ Player.prototype.render = function() {
 Player.prototype.reset = function() {
     this.x = this.startPos.x;
     this.y = this.startPos.y;
-    this.direction = false;
+    this.direction = false; // Make the player stand still
 };
 
 // Handle the input to move the player
@@ -171,6 +130,5 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
