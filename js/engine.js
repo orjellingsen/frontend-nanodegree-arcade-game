@@ -115,6 +115,7 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
+            /* I added another column and row to increase size of the game level */
             numRows = 6,
             numCols = 7,
             row, col;
