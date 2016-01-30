@@ -3,6 +3,8 @@
 This game is part of an udacity nanodegree program, where I learned how to make an arcade game using HTML5 Canvas and JavaScript
 
 ##Installation
+Clone this repository to your computer. 
+
 To start the game, open index.html in a browser, and the game will begin.
 
 ##Controls

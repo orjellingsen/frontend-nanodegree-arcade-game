@@ -3,17 +3,18 @@ var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug-red.png'; // Enemy sprite
     this.x = x - 110; // Offset x-coordinate to make bug start outside screen
     this.y = 60 + 85 * y; // Place the enemies in the correct lane based on y input
-    this.randomSpeed(); // Call speed function to generate enemy speed
     this.collisionWidth = 50;
     this.collisionHeight = 45;
+    this.speed = false; // Set speed to false, so Enemy.update know to set the speed first time
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/* Update the enemy's position
+ * Parameter: dt, a time delta between ticks */
 Enemy.prototype.update = function(dt, player) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    // If speed is not set, generate random speed
+    if(!this.speed) {
+        this.randomSpeed(dt); 
+    }
     // If enemy goes outside screen, reset to the left side and change its speed
     if (this.x > 707) {
         this.x = -110;
@@ -21,7 +22,7 @@ Enemy.prototype.update = function(dt, player) {
     }
     /* As long as the enemy is inside the screen, move it along 
      * the x-axis and check for collisions on each update */
-    this.x += this.speed;
+    this.x += (this.speed * dt);
     this.checkCollision(player);
 };
 
@@ -33,15 +34,16 @@ Enemy.prototype.checkCollision = function(player) {
     }
 };
 
-Enemy.prototype.randomSpeed = function() {
+Enemy.prototype.randomSpeed = function(dt) {
     // Generate a random number to determine enemy speed
-    this.speed = ((Math.floor((Math.random() * 8) + 2)));
+    this.speed = Math.floor((Math.random() * 400) + 100);
+    console.log(this.speed);
     // Change appearance of enemy based on its speed
-    if (this.speed > 3 && this.speed <= 5) {
+    if (this.speed > 150 && this.speed <= 250) {
         this.sprite = 'images/enemy-bug-green.png';
-    } else if (this.speed > 5 && this.speed <= 7) {
+    } else if (this.speed > 250 && this.speed <= 350) {
         this.sprite = 'images/enemy-bug-yellow.png';
-    } else if (this.speed > 7) {
+    } else if (this.speed > 350) {
         this.sprite = 'images/enemy-bug-blue.png';
     } else {
         this.sprite = 'images/enemy-bug-red.png';
@@ -66,7 +68,7 @@ var Player = function(x, y) {
     // Set player to the starting position
     this.reset();
     // Player movement speed
-    this.speed = 6;
+    this.speed = 300;
     // Starting score and highscore is set
     this.score = 0;
     this.highScore = this.score;
@@ -75,21 +77,23 @@ var Player = function(x, y) {
 // Update player's position
 Player.prototype.update = function(dt) {
     /* If the player reaches the top of the screen (water),
-     * add score, level and reset player */
+     * add score and reset player location */
     if (this.y < 1) {
         this.updateScore('water');
         this.reset();
     }
     /* Change direction based on the input receieved,
-     * and make sure player don't exit screen */
+     * and make sure player don't exit screen.
+     * Speed is multiplied by dt to make speed same gamespeed
+     * across computers */
     if (this.direction === 'up' && this.y > 0) {
-        this.y -= this.speed;
+        this.y -= this.speed * dt;
     } else if (this.direction === 'down'  && this.y < 400) {
-        this.y += this.speed;
+        this.y += this.speed * dt;
     } else if (this.direction === 'left'  && this.x > 0) {
-        this.x -= this.speed;
+        this.x -= this.speed * dt;
     } else if (this.direction === 'right' && this.x < 600) {
-        this.x += this.speed;
+        this.x += this.speed * dt;
     }
 };
 
@@ -119,8 +123,10 @@ Player.prototype.updateScore = function(condition) {
 
 // Draw the player on the screen
 Player.prototype.render = function() {
+    // Draw player sprite at the starting position
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    this.updateScore(); // Show initial score
+    // Show initial score
+    this.updateScore();
 };
 
 // Reset player to original position and add score
