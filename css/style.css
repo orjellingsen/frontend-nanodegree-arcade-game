@@ -1,15 +1,17 @@
 body {
-	text-align: center;
-	background-color: #555;
-	font-family: Verdana, sans-serif;
-	color: white;
-	margin: 0;
+    text-align: center;
+    background-color: #555;
+    font-family: Verdana, sans-serif;
+    color: white;
+    margin: 0;
 }
+
 h1 {
-	background-color: #4a7996;
-	margin: 0;
-	padding: 20px;
+    background-color: #4a7996;
+    margin: 0;
+    padding: 20px;
 }
+
 canvas {
-	margin-top: 50px;
+    margin-top: 50px;
 }

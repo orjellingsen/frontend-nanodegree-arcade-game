@@ -102,7 +102,8 @@ Player.prototype.update = function(dt) {
 	}
 };
 
-Player.prototype.updateScore = function(condition) {
+// Display score and highscore in the canvas
+Player.prototype.displayScore = function() {
 	// Styling for the score display
 	ctx.font = '18px Verdana';
 	ctx.fillStyle = "#fff";
@@ -112,17 +113,21 @@ Player.prototype.updateScore = function(condition) {
 	// Display the score and highscore
 	this.scoreText = ctx.fillText('Score: ' + this.score, 400, 40);
 	this.highScoreText = ctx.fillText('Highest Score: ' + this.highScore, 50, 40);
+};
+
+// Update or reset score based on condition
+Player.prototype.updateScore = function(condition) {
 	// Increase and display score if player reaches the water
 	if (condition === 'water') {
 		this.score += 1;
-		this.scoreText;
+		player.displayScore();
 	// If the player collide with enemy, reset score and set new highscore
 	} else if (condition === 'collision') {
 		if (this.score > this.highScore) {
 			this.highScore = this.score;
 		}
 		this.score = 0;
-		this.scoreText;
+		player.displayScore();
 	}
 };
 
@@ -131,7 +136,7 @@ Player.prototype.render = function() {
 	// Draw player sprite at the starting position
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 	// Show initial score
-	this.updateScore();
+	this.displayScore();
 };
 
 // Reset player to original position and add score
