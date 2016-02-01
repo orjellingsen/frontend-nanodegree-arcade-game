@@ -8,7 +8,7 @@ Clone this repository to your computer.
 To start the game, open index.html in a browser, and the game will begin.
 
 ##Controls
-Control your character by using the arrow keys on your keyboard. The character will move automatically in the chosen direction, and will only change directions when another arrow key is pressed.
+Control your character by using the arrow keys on your keyboard. The character will move automatically in the chosen direction, and will only change directions when another arrow key is pressed. You do not need to hold the keys down to move the character.
 
 ##Rules
 The goal of the game is to reach the water without colliding with any bugs. 

@@ -44,7 +44,6 @@ Enemy.prototype.checkCollision = function(player) {
 Enemy.prototype.randomSpeed = function(dt) {
 	// Generate a random number to determine enemy speed
 	this.speed = Math.floor((Math.random() * 400) + 100);
-	console.log(this.speed);
 	// Change appearance of enemy based on its speed
 	if (this.speed > 150 && this.speed <= 250) {
 		this.sprite = 'images/enemy-bug-green.png';
@@ -92,7 +91,11 @@ Player.prototype.update = function(dt) {
 	/* Change direction based on the input receieved,
 	 * and make sure player don't exit screen.
 	 * Speed is multiplied by dt to make speed same gamespeed
-	 * across computers */
+	 * across computers 
+	 *
+	 * Keeping the movement logic inside update is intentional,
+	 * as I want the character to keep moving on its own in the
+	 * desired direction. */
 	if (this.direction === 'up' && this.y > 0) {
 		this.y -= this.speed * dt;
 	} else if (this.direction === 'down'  && this.y < 400) {
