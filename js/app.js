@@ -21,7 +21,8 @@ Enemy.prototype.update = function(dt, player) {
 		this.randomSpeed(dt);
 	}
 	// If enemy goes outside screen, reset to the left side and change its speed
-	if (this.x > 707) {
+	var canvasWidth = 707;
+	if (this.x > canvasWidth) {
 		this.x = -110;
 		this.randomSpeed(dt);
 	}
@@ -32,6 +33,7 @@ Enemy.prototype.update = function(dt, player) {
 };
 
 Enemy.prototype.checkCollision = function(player) {
+	// Checks to see if the player x/y coordinates are within the enemy's collision box
 	if (Math.abs(player.x - this.x) < this.collisionWidth && Math.abs(player.y - this.y) < this.collisionHeight) {
 		// Update score and reset player
 		player.updateScore('collision');
@@ -120,14 +122,14 @@ Player.prototype.updateScore = function(condition) {
 	// Increase and display score if player reaches the water
 	if (condition === 'water') {
 		this.score += 1;
-		player.displayScore();
+		this.displayScore();
 	// If the player collide with enemy, reset score and set new highscore
 	} else if (condition === 'collision') {
 		if (this.score > this.highScore) {
 			this.highScore = this.score;
 		}
 		this.score = 0;
-		player.displayScore();
+		this.displayScore();
 	}
 };
 
